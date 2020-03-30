@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: main
+Version: 0.0.1
+Summary: Test
+Home-page: ---
+Author: Home
+Author-email: home@interno.bb.com.br
+License: COPYRIGHT
+Description: ---
+Platform: UNKNOWN
+Classifier: Intended Audience :: Information Technology
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=3.6
+Provides-Extra: dev
+Provides-Extra: unit
+Provides-Extra: integration

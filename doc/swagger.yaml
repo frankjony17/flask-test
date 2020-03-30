@@ -1,0 +1,157 @@
+swagger: '2.0'
+
+info:
+  version: 0.1.1
+  title: Sauron Warehouse API
+  description: 'API to manage SQL and Big Data databases. Services
+                consumed by sauron-similarity and IBI.'
+  contact:
+    email: c1310169@interno.bb.com.br
+
+schemes:
+  - http
+
+tags:
+  - name: Postgre-SQL IBI
+    description: 'Manage databases.'
+
+paths:
+  /db/add-ibi-logs:
+    post:
+      tags:
+        - Postgre-SQL IBI
+      description: 'Save records of IBI (API responses).'
+      parameters:
+        - name: ibi_logs
+          in: body
+          required: true
+          description: 'Logs da API IBI'
+          schema:
+            $ref: '#/definitions/IbiLogs'
+      responses:
+        '200':
+          description: 'OK'
+          schema:
+            $ref: '#/definitions/Response200'
+        '400':
+          description: 'Bad Request, wrong syntax'
+          schema:
+            $ref: '#/definitions/Error400'
+        '400-4':
+          description: 'Bad Request, required parameters missing'
+          schema:
+            $ref: '#/definitions/Error400-4'
+
+  /db/find-ibi-logs:
+      post:
+        tags:
+          - Postgre-SQL IBI
+        description: 'Obtain registered records from the IMA protocol.'
+        parameters:
+          - name: protocoloIma
+            in: body
+            required: true
+            description: 'IMA protocol'
+            schema:
+              $ref: '#/definitions/ImaProtocol'
+        responses:
+          '200':
+            description: 'OK'
+            schema:
+              $ref: '#/definitions/ResponseGet200'
+          '400':
+            description: 'Bad Request, wrong syntax'
+            schema:
+              $ref: '#/definitions/Error400'
+          '400-4':
+            description: 'Bad Request, required parameters missing'
+            schema:
+              $ref: '#/definitions/Error400-4'
+
+definitions:
+  IbiLogs:
+    type: object
+    required:
+      - resposta
+      - protocoloIma
+    properties:
+      resposta:
+        type: object
+        example: {
+          "indicacaoExistencia": true,
+          "quantidadeIdentificadoresImagemEncontrados": 17,
+          "dadosImagens": [{
+               "scoreComparacao": 89.0,
+               "numeroRegistroNaoApto": 658,
+               "referenciaPessoaNaoApta": "desenv_NTgxOTkuanBn.jpg",
+               "identificador": {
+                   "numeroPessoa": 1,
+                   "numeroBiometria": 1,
+                   "numeroImagem": 0,
+                   "numeroVetor": 2
+               }
+          }]
+        }
+      protocoloIma:
+        type: string
+        example: "20191830000072472"
+
+
+  ImaProtocol:
+    type: object
+    required:
+      - protocoloIma
+    properties:
+      protocoloIma:
+        type: string
+        example: "20191830000072472"
+
+  Response200:
+    type: object
+    properties:
+    example: {
+       "protocoloIma": "20191830000072472",
+       "detail": "success"
+    }
+
+  ResponseGet200:
+    type: object
+    properties:
+    example: {
+      "dataCriacao": "Thu, 05 Mar 2020 18:32:24 GMT",
+      "protocoloIma": "20191830000072472",
+      "quantidadeIdentificadoresImagemEncontrados": 17,
+      "dadosImagens": [{
+         "scoreComparacao": 89.0,
+         "numeroRegistroNaoApto": 658,
+         "referenciaPessoaNaoApta": "desenv_NTgxOTkuanBn.jpg",
+         "identificador": {
+             "numeroPessoa": 1,
+             "numeroBiometria": 1,
+             "numeroImagem": 0,
+             "numeroVetor": 2
+         }
+       }]
+    }
+
+  Error400:
+    type: object
+    properties:
+      message:
+        type: string
+        example: 'Bad Request, wrong syntax'
+      details:
+        type: string
+        example: 'The request could not be understood by the server due to
+        malformed syntax. The client SHOULD NOT repeat the request without
+        modifications.'
+
+  Error400-4:
+    type: object
+    properties:
+      message:
+        type: string
+        example: 'Bad Request, required parameters missing'
+      details:
+        type: string
+        example: "Required parameters wasn't found."
